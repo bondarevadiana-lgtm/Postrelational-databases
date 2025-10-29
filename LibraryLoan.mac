@@ -1,0 +1,49 @@
+ROUTINE LibraryLoan
+  New branchID, bookTitle, borrowDate, memberID
+  New borrowerName, dueDate, condition
+  New loanInfo, storedList, foundPos, searchVal, summaryList
+
+  Write !,"Enter Branch ID (number): " Read branchID
+  Write !,"Enter Book Title: " Read bookTitle
+  Write !,"Enter Borrow Date (YYYY-MM-DD): " Read borrowDate
+  Write !,"Enter Member ID (number): " Read memberID
+
+  Write !,"Enter Borrower Name: " Read borrowerName
+  Write !,"Enter Return Due Date (YYYY-MM-DD): " Read dueDate
+  Write !,"Enter Book Condition (new/good/damaged): " Read condition
+
+
+  Set loanInfo = $LISTBUILD(borrowerName, dueDate, condition)
+
+
+  Set ^Library(branchID, bookTitle, borrowDate, memberID) = loanInfo
+
+  Write !!,"Data stored in ^Library(",branchID,",",bookTitle,",",borrowDate,",",memberID,")",!
+
+
+  Set storedList = ^Library(branchID, bookTitle, borrowDate, memberID)
+
+
+  Set summaryList = $LISTBUILD("Summary",$LISTGET(storedList,1),$LISTGET(storedList,2))
+  Write !,"Summary list: ", $LISTTOSTRING(summaryList," | "),!
+
+  Write !!,"=== Using list functions ===",!
+  Write "Borrower: ", $LISTGET(storedList,1),!
+  Write "Due Date: ", $LISTGET(storedList,2),!
+  Write "Condition: ", $LISTGET(storedList,3),!
+
+  Write !,"Number of elements: ", $LISTLENGTH(storedList),!
+
+  Write !,"Enter value to search in list: " Read searchVal
+  Set foundPos = $LISTFIND(storedList, searchVal)
+  If foundPos>0 {
+    Write "Value found at position ", foundPos,!
+  } Else {
+    Write "Value not found.",!
+  }
+
+  Write !,"List as string: ", $LISTTOSTRING(storedList, ", "),!
+
+  Write !!,"=== Current Global Content ===",!
+  ZWRITE ^Library
+  Quit

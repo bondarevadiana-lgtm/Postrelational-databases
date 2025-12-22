@@ -75,7 +75,6 @@ Do ##class(Library.Utils).GenerateData(10)
 Приклад запуску тестування:
 
 ```
-Set ^UnitTestRoot = "/usr/src/lab4"
 Do ##class(%UnitTest.Manager).RunTest("Library")
 ```
 

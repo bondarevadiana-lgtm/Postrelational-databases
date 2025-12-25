@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>Book Manager</title>
+    <script language="javascript">
+
+        async function deleteBook(id) {
+            const response = await fetch(`/api/library/book/${id}`, { method: 'DELETE' });
+            if (response.ok) {
+                alert('Book deleted');
+                location.reload(); 
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Library Books</h2>
+    <table border="1">
+        <tr><th>ID</th><th>Title</th><th>Author</th><th>Actions</th></tr>
+        <script language="cache" runat="server">
+            &sql(DECLARE C1 CURSOR FOR SELECT ItemID, Title, Author FROM Library.Book)
+            &sql(OPEN C1)
+            For {
+                &sql(FETCH C1 INTO :id, :title, :author)
+                Quit:SQLCODE
+                Write "<tr><td>",id,"</td><td>",title,"</td><td>",author,"</td>",
+                      "<td><button onclick='deleteBook("_id_")'>Видалити через REST</button></td></tr>"
+            }
+            &sql(CLOSE C1)
+        </script>
+    </table>
+</body>
+</html>
